@@ -73,8 +73,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(28,28,28,0.
 
 /* FILTER */
 .filter-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:48px 0;}
-.filter-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:9px 22px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;border-radius:2px;}
+.filter-btn{background:none;border:1px solid var(--border);color:var(--text-muted);padding:9px 22px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all 0.3s;border-radius:2px;flex-shrink:0;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.06);}
+@media(max-width:640px){
+  .filter-bar{
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x proximity;
+    padding:4px 5% 14px;
+    margin:32px 0;
+    scrollbar-width:none;
+  }
+  .filter-bar::-webkit-scrollbar{display:none;}
+  .filter-btn{scroll-snap-align:start;}
+}
 
 /* GRID */
 .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:20px;max-width:1200px;margin:0 auto;}
@@ -316,6 +330,7 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .modal h3{font-size:17px;font-weight:600;margin-bottom:14px;}
 #adminApp .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;}
 #adminApp .a-hamburger{display:none;background:var(--a-accent);color:#fff;border:none;padding:9px 13px;cursor:pointer;font-size:18px;position:fixed;top:12px;left:12px;z-index:200;border-radius:8px;}
+#adminApp .sidebar-close-btn{display:none;}
 #adminApp .view-banner{background:var(--a-gold-light);border-bottom:1px solid rgba(201,168,76,0.3);padding:8px 20px;font-size:12px;color:var(--a-amber);display:flex;align-items:center;gap:8px;font-weight:600;}
 #adminApp .loading-row td{text-align:center;color:var(--a-muted);padding:30px;font-style:italic;}
 #adminApp .sync-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;display:inline-block;margin-right:4px;animation:pulse 2s ease-in-out infinite;}
@@ -339,9 +354,12 @@ footer b{color:var(--gold);font-weight:400;}
 
 @media(max-width:960px){
   #adminApp .app{grid-template-columns:1fr;}
-  #adminApp .sidebar{position:fixed;left:-250px;width:var(--a-sidebar-w);z-index:100;transition:left .25s;top:0;}
+  #adminApp .sidebar{position:fixed;left:calc(-1 * var(--a-sidebar-w) - 10px);width:var(--a-sidebar-w);z-index:9300;transition:left .25s;top:0;bottom:0;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
   #adminApp .sidebar.open{left:0;}
+  #adminApp .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9200;}
+  #adminApp .sidebar-backdrop.open{display:block;}
   #adminApp .a-hamburger{display:block;}
+  #adminApp .sidebar-close-btn{display:block;position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;z-index:1;}
   #adminApp .main{padding:14px;padding-top:58px;}
   #adminApp .cards{grid-template-columns:repeat(2,1fr);}
   #adminApp .grid-2,#adminApp .grid-2-equal{grid-template-columns:1fr;}
@@ -501,9 +519,11 @@ footer b{color:var(--gold);font-weight:400;}
 <div id="adminApp">
 
 <button class="a-hamburger" onclick="toggleSidebar()">☰</button>
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
 
 <div class="app">
   <aside class="sidebar" id="sidebar">
+    <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Funga menyu">✕</button>
     <div class="brand">
       <div class="brand-name">Alyah's<br>Fashion Hub</div>
       <div class="brand-sub">Mfumo wa Biashara</div>
@@ -921,6 +941,27 @@ const CLD='djxnibsil';
 const PRESET='alyahabubakar';
 const SIZES=['XS','S','M','L','XL','XXL'];
 const WA='255748863304';
+const ADMIN_PHONE='0748863304';
+// Edge Function proxy — keeps Beem API key off the frontend
+const SMS_FN_URL='https://xfenepdrtqkqxqicqukh.supabase.co/functions/v1/send-sms';
+
+// ─── SMS helper — fails silently (toast only) so a Beem outage never
+// blocks an order from being placed/confirmed. Logs to console for debugging.
+async function sendSms(to,message){
+  try{
+    const r=await fetch(SMS_FN_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({to,message})
+    });
+    const data=await r.json();
+    if(!r.ok||!data.ok){console.warn('SMS not sent:',data);}
+    return data;
+  }catch(e){
+    console.warn('SMS send failed:',e.message);
+    return null;
+  }
+}
 const CAT_LABEL={dress:'Dress',abaya:'Abaya',outfit:'Outfit',wedding:'Bridal'};
 
 const H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
@@ -1081,6 +1122,9 @@ async function placeOrder(){
       });
     }
     orderWhatsApp();
+    const jumlaYote=cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const orderSummary=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
+    sendSms(ADMIN_PHONE,`Agizo Jipya - Alyah's Fashion Hub: ${orderSummary}. Jumla: TZS ${jumlaYote.toLocaleString()}. Simu ya mteja: ${phone}. Tembelea admin panel kuthibitisha.`);
     toast('✅ Agizo limetumwa! Tutakuthibitishia hivi karibuni.');
     cart=[];updateCartUI();renderCart();closeCart();
   }catch(e){
@@ -1200,10 +1244,13 @@ document.querySelectorAll('#adminApp .nav-btn').forEach(btn=>{
     document.querySelectorAll('#adminApp .page').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     $(btn.dataset.page).classList.add('active');
-    if(window.innerWidth<=960)$('sidebar').classList.remove('open');
+    if(window.innerWidth<=960){$('sidebar').classList.remove('open');$('sidebarBackdrop').classList.remove('open');}
   });
 });
-function toggleSidebar(){$('sidebar').classList.toggle('open');}
+function toggleSidebar(){
+  const open=$('sidebar').classList.toggle('open');
+  $('sidebarBackdrop').classList.toggle('open',open);
+}
 
 // ════════════════════════════════════════════════════════════════
 // HESABU (financial calculations) — unchanged logic from hesabu.html
@@ -1481,6 +1528,10 @@ async function thibitishaOrder(id){
       } else {
         await DB.post('wateja',{jina,simu:o.simu_mteja||'Haijasemwa',deni_lote:o.jumla,kilicholipwa:o.kilicholipwa||0,bakaa:o.bakaa,tarehe_mwisho:null,hali:o.bakaa===0?'Amelipa Kamili':'Hajalipa'});
       }
+    }
+    sendSms(ADMIN_PHONE,`Imethibitishwa: ${o.jina} x${o.idadi} (TZS ${Number(o.jumla).toLocaleString()}) kwa mteja ${o.simu_mteja||'N/A'}.`);
+    if(o.simu_mteja){
+      sendSms(o.simu_mteja,`Habari kutoka Alyah's Fashion Hub! Agizo lako la ${o.jina} (x${o.idadi}, TZS ${Number(o.jumla).toLocaleString()}) limethibitishwa. Tutawasiliana nawe kwa WhatsApp kuhusu malipo na delivery. Asante!`);
     }
     toast(`✅ Agizo la "${o.jina}" limethibitishwa — stock imepunguzwa.`);
     await loadAll();
