@@ -454,13 +454,14 @@ footer b{color:var(--gold);font-weight:400;}
   /* force both display AND column direction so it never collapses to row */
   #adminApp .a-topnav{display:flex;flex-direction:column;z-index:9500;}
   #adminApp .main{padding:14px;padding-top:116px;}
-  #adminApp .cards{grid-template-columns:repeat(2,1fr);}
+  /* !important overrides any inline style="grid-template-columns:..." on .cards */
+  #adminApp .cards{grid-template-columns:repeat(2,1fr) !important;}
   #adminApp .grid-2,#adminApp .grid-2-equal{grid-template-columns:1fr;}
   #adminApp .report-grid{grid-template-columns:repeat(2,1fr);}
   #adminApp .form-grid{grid-template-columns:1fr;}
 }
 @media(max-width:540px){
-  #adminApp .cards{grid-template-columns:1fr;}
+  #adminApp .cards{grid-template-columns:1fr !important;}
   #adminApp .report-grid{grid-template-columns:1fr;}
   #adminApp .summary-grid{grid-template-columns:1fr;}
   #adminApp .topbar{flex-direction:column;align-items:flex-start;}
