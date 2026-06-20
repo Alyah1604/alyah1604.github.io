@@ -356,72 +356,82 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .a-topnav{
   display:none;
   position:fixed;top:0;left:0;right:0;
-  z-index:9300;
+  z-index:9500;
   background:var(--a-accent);
   flex-direction:column;
   box-shadow:0 2px 16px rgba(0,0,0,0.35);
 }
 #adminApp .a-topnav-brand{
   display:flex;align-items:center;justify-content:space-between;
-  padding:11px 14px 9px;
-  border-bottom:1px solid rgba(255,255,255,0.08);
+  padding:10px 14px 9px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  flex-shrink:0;
 }
 #adminApp .a-topnav-brand-left{display:flex;align-items:center;gap:8px;}
-#adminApp .a-topnav-brand-name{font-family:'DM Serif Display',serif;font-size:17px;color:#fff;line-height:1.1;}
+#adminApp .a-topnav-brand-name{font-family:'DM Serif Display',serif;font-size:16px;color:#fff;line-height:1.1;}
 #adminApp .a-topnav-badge{
   background:rgba(201,168,76,0.2);color:var(--a-gold);
   border:1px solid rgba(201,168,76,0.3);
-  padding:2px 9px;border-radius:20px;font-size:10px;font-weight:600;
+  padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;
 }
-#adminApp .a-topnav-actions{display:flex;gap:6px;}
+#adminApp .a-topnav-actions{display:flex;gap:5px;}
 #adminApp .a-topnav-action-btn{
   background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);
-  border:none;padding:5px 11px;border-radius:6px;
+  border:none;padding:5px 10px;border-radius:6px;
   font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;
+  white-space:nowrap;
 }
 #adminApp .a-topnav-action-btn:hover{background:rgba(255,255,255,0.18);color:#fff;}
+/* ── Scrollable tab strip ── */
 #adminApp .a-topnav-tabs{
   display:flex;
-  overflow-x:auto;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  width:100%;
+  overflow-x:scroll;
+  overflow-y:hidden;
   -webkit-overflow-scrolling:touch;
-  scroll-snap-type:x proximity;
   scrollbar-width:none;
-  padding:0 2px;
+  touch-action:pan-x;
+  overscroll-behavior-x:contain;
+  padding:0;
+  flex-shrink:0;
 }
 #adminApp .a-topnav-tabs::-webkit-scrollbar{display:none;}
 #adminApp .a-tab-btn{
-  flex-shrink:0;
-  scroll-snap-align:start;
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  padding:8px 13px 7px;
+  flex:0 0 auto;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  padding:7px 16px 6px;
   background:transparent;
   border:none;
   border-bottom:2.5px solid transparent;
   color:rgba(255,255,255,0.42);
   font-family:'DM Sans',sans-serif;
-  cursor:pointer;transition:all .15s;
-  white-space:nowrap;position:relative;
+  cursor:pointer;transition:color .15s,border-color .15s;
+  white-space:nowrap;position:relative;min-width:60px;
 }
-#adminApp .a-tab-btn .t-icon{font-size:17px;line-height:1;}
-#adminApp .a-tab-btn .t-label{font-size:9.5px;letter-spacing:0.2px;font-weight:500;}
+#adminApp .a-tab-btn .t-icon{font-size:18px;line-height:1.2;display:block;}
+#adminApp .a-tab-btn .t-label{font-size:9px;letter-spacing:0.3px;font-weight:500;display:block;}
 #adminApp .a-tab-btn:hover{color:rgba(255,255,255,0.75);}
 #adminApp .a-tab-btn.active{color:var(--a-gold);border-bottom-color:var(--a-gold);}
 #adminApp .a-tab-btn .t-pill{
-  position:absolute;top:3px;right:5px;
+  position:absolute;top:3px;right:4px;
   background:var(--a-red);color:#fff;
-  font-size:8.5px;font-weight:700;
-  padding:1px 5px;border-radius:999px;line-height:1.5;
+  font-size:8px;font-weight:700;
+  padding:1px 4px;border-radius:999px;line-height:1.5;
 }
 
 @media(max-width:960px){
   #adminApp .app{grid-template-columns:1fr;}
-  #adminApp .sidebar{position:fixed;left:calc(-1 * var(--a-sidebar-w) - 10px);width:var(--a-sidebar-w);z-index:9300;transition:left .25s;top:0;bottom:0;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
+  /* sidebar slides off-screen; z-index BELOW topnav so it can never bleed through */
+  #adminApp .sidebar{position:fixed;left:calc(-1 * var(--a-sidebar-w) - 10px);width:var(--a-sidebar-w);z-index:9100;transition:left .25s;top:0;bottom:0;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
   #adminApp .sidebar.open{left:0;}
-  #adminApp .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9200;}
+  #adminApp .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9000;}
   #adminApp .sidebar-backdrop.open{display:block;}
   #adminApp .a-hamburger{display:none;}
-  #adminApp .a-topnav{display:flex;}
-  #adminApp .main{padding:14px;padding-top:112px;}
+  /* force both display AND column direction so it never collapses to row */
+  #adminApp .a-topnav{display:flex;flex-direction:column;z-index:9500;}
+  #adminApp .main{padding:14px;padding-top:116px;}
   #adminApp .cards{grid-template-columns:repeat(2,1fr);}
   #adminApp .grid-2,#adminApp .grid-2-equal{grid-template-columns:1fr;}
   #adminApp .report-grid{grid-template-columns:repeat(2,1fr);}
