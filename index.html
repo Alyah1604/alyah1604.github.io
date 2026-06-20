@@ -236,17 +236,17 @@ footer b{color:var(--gold);font-weight:400;}
   --a-radius:14px;--a-radius-sm:9px;--a-shadow:0 2px 16px rgba(0,0,0,0.06);
   --a-sidebar-w:230px;
   font-family:'DM Sans',sans-serif;background:var(--a-bg);color:var(--a-text);min-height:100vh;
-  position:fixed;inset:0;z-index:8000;display:none;overflow-y:auto;
+  position:fixed;inset:0;z-index:8000;display:none;overflow:hidden;
 }
 #adminApp.open{display:block;}
 #adminApp *{box-sizing:border-box;}
-#adminApp .app{display:grid;grid-template-columns:var(--a-sidebar-w) 1fr;min-height:100vh;}
-#adminApp .sidebar{background:var(--a-accent);color:#fff;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;overflow-y:auto;}
+#adminApp .app{display:grid;grid-template-columns:var(--a-sidebar-w) 1fr;height:100vh;overflow:hidden;}
+#adminApp .sidebar{background:var(--a-accent);color:#fff;height:100vh;display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;}
 #adminApp .brand{padding:24px 18px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
 #adminApp .brand-name{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;line-height:1.2;}
 #adminApp .brand-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
 #adminApp .mode-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:rgba(201,168,76,0.2);color:var(--a-gold);border:1px solid rgba(201,168,76,0.3);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
-#adminApp .nav{padding:10px 8px;flex:1;}
+#adminApp .nav{position:static;top:auto;left:auto;right:auto;height:auto;z-index:auto;backdrop-filter:none;display:block;justify-content:flex-start;align-items:stretch;padding:10px 8px;flex:1;border-bottom:none;background:transparent;}
 #adminApp .nav-section{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:12px 10px 6px;font-weight:600;}
 #adminApp .nav-btn{width:100%;border:none;background:transparent;color:rgba(255,255,255,0.55);text-align:left;padding:10px 12px;margin-bottom:1px;border-radius:var(--a-radius-sm);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s;display:flex;align-items:center;gap:9px;}
 #adminApp .nav-btn:hover{background:rgba(255,255,255,0.07);color:#fff;}
@@ -254,7 +254,7 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .nav-btn .icon{font-size:15px;width:18px;text-align:center;}
 #adminApp .nav-btn .count-pill{margin-left:auto;background:var(--a-red);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;}
 #adminApp .sidebar-footer{padding:14px 18px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;color:rgba(255,255,255,0.25);}
-#adminApp .main{padding:24px 28px;overflow-x:hidden;max-width:1400px;}
+#adminApp .main{padding:24px 28px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;max-width:1400px;height:100vh;width:100%;}
 #adminApp .page{display:none;}
 #adminApp .page.active{display:block;}
 #adminApp .topbar{margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
@@ -353,14 +353,14 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .order-card.pending{border-left:3px solid var(--a-gold);background:var(--a-gold-light);}
 
 @media(max-width:960px){
-  #adminApp .app{grid-template-columns:1fr;}
-  #adminApp .sidebar{position:fixed;left:calc(-1 * var(--a-sidebar-w) - 10px);width:var(--a-sidebar-w);z-index:9300;transition:left .25s;top:0;bottom:0;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(0,0,0,0.3);}
+  #adminApp .app{grid-template-columns:1fr;height:100vh;}
+  #adminApp .sidebar{position:fixed;left:calc(-1 * var(--a-sidebar-w) - 10px);width:var(--a-sidebar-w);z-index:9300;transition:left .25s;top:0;bottom:0;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(0,0,0,0.3);touch-action:pan-y;}
   #adminApp .sidebar.open{left:0;}
   #adminApp .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9200;}
   #adminApp .sidebar-backdrop.open{display:block;}
   #adminApp .a-hamburger{display:block;}
   #adminApp .sidebar-close-btn{display:block;position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:14px;cursor:pointer;z-index:1;}
-  #adminApp .main{padding:14px;padding-top:58px;}
+  #adminApp .main{padding:14px;padding-top:58px;height:100vh;}
   #adminApp .cards{grid-template-columns:repeat(2,1fr);}
   #adminApp .grid-2,#adminApp .grid-2-equal{grid-template-columns:1fr;}
   #adminApp .report-grid{grid-template-columns:repeat(2,1fr);}
