@@ -225,15 +225,15 @@ footer b{color:var(--gold);font-weight:400;}
 }
 
 /* ════════════════════════════════════════════════════════════════
-   ADMIN DASHBOARD THEME (light editorial) — from hesabu.html
+   ADMIN DASHBOARD THEME — dark, matching storefront editorial palette
    Namespaced under #adminApp so it never leaks into the storefront
    ════════════════════════════════════════════════════════════════ */
 #adminApp{
-  --a-bg:#F7F5F2;--a-panel:#FFFFFF;--a-text:#1A1A1A;--a-muted:#6B6B6B;
-  --a-line:#EAE6E0;--a-accent:#1A1A1A;--a-gold:#C9A84C;--a-gold-light:#FBF5E6;
-  --a-green:#2D6A4F;--a-green-light:#E8F5EE;--a-red:#9B2335;--a-red-light:#FDF0F0;
-  --a-amber:#92650A;--a-amber-light:#FDF6E3;--a-blue:#1565C0;--a-blue-light:#E3F2FD;
-  --a-radius:14px;--a-radius-sm:9px;--a-shadow:0 2px 16px rgba(0,0,0,0.06);
+  --a-bg:#1C1C1C;--a-panel:#262626;--a-text:#F0EBE0;--a-muted:#9A8F80;
+  --a-line:rgba(201,168,76,0.2);--a-accent:#111111;--a-gold:#C9A84C;--a-gold-light:rgba(201,168,76,0.14);
+  --a-green:#4CAF50;--a-green-light:rgba(76,175,80,0.15);--a-red:#EF5350;--a-red-light:rgba(239,83,80,0.15);
+  --a-amber:#FFA726;--a-amber-light:rgba(255,167,38,0.15);--a-blue:#42A5F5;--a-blue-light:rgba(66,165,245,0.15);
+  --a-radius:14px;--a-radius-sm:9px;--a-shadow:0 4px 28px rgba(0,0,0,0.5);
   --a-sidebar-w:230px;
   font-family:'DM Sans',sans-serif;background:var(--a-bg);color:var(--a-text);min-height:100vh;
   position:fixed;inset:0;z-index:8000;display:none;overflow-y:auto;
@@ -262,51 +262,73 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .topbar-left p{color:var(--a-muted);font-size:13px;margin-top:3px;}
 #adminApp .topbar-right{display:flex;gap:8px;align-items:center;}
 #adminApp .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
-#adminApp .card{background:var(--a-panel);border-radius:var(--a-radius);padding:18px 20px;box-shadow:var(--a-shadow);border:1px solid var(--a-line);}
-#adminApp .c-label{font-size:11px;color:var(--a-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;}
-#adminApp .c-value{font-size:22px;font-weight:700;margin-top:8px;line-height:1;}
+/* Base card — dark panel with gold left accent */
+#adminApp .card{
+  background:var(--a-panel);
+  border-radius:var(--a-radius);
+  padding:20px 22px;
+  box-shadow:var(--a-shadow);
+  border:1px solid rgba(255,255,255,0.06);
+  border-left:3px solid var(--a-gold);
+  position:relative;overflow:hidden;
+}
+/* Colored card variants — border + subtle gradient tint + value color */
+#adminApp .card.c-green{border-left-color:var(--a-green);background:linear-gradient(135deg,rgba(76,175,80,0.1) 0%,var(--a-panel) 55%);}
+#adminApp .card.c-green .c-value{color:var(--a-green);}
+#adminApp .card.c-blue{border-left-color:var(--a-blue);background:linear-gradient(135deg,rgba(66,165,245,0.1) 0%,var(--a-panel) 55%);}
+#adminApp .card.c-blue .c-value{color:var(--a-blue);}
+#adminApp .card.c-red{border-left-color:var(--a-red);background:linear-gradient(135deg,rgba(239,83,80,0.1) 0%,var(--a-panel) 55%);}
+#adminApp .card.c-red .c-value{color:var(--a-red);}
+#adminApp .card.c-gold{border-left-color:var(--a-gold);background:linear-gradient(135deg,rgba(201,168,76,0.1) 0%,var(--a-panel) 55%);}
+#adminApp .card.c-gold .c-value{color:var(--a-gold);}
+#adminApp .card.c-amber{border-left-color:var(--a-amber);background:linear-gradient(135deg,rgba(255,167,38,0.1) 0%,var(--a-panel) 55%);}
+#adminApp .card.c-amber .c-value{color:var(--a-amber);}
+#adminApp .card.c-gray{border-left-color:var(--a-muted);}
+#adminApp .c-label{font-size:10px;color:var(--a-muted);text-transform:uppercase;letter-spacing:.1em;font-weight:600;}
+#adminApp .c-value{font-size:24px;font-weight:700;margin-top:10px;line-height:1.1;color:var(--a-text);}
 #adminApp .c-sub{font-size:12px;color:var(--a-muted);margin-top:6px;}
-#adminApp .c-badge{display:inline-flex;align-items:center;margin-top:8px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
+#adminApp .c-badge{display:inline-flex;align-items:center;margin-top:10px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:600;}
 #adminApp .badge-green{background:var(--a-green-light);color:var(--a-green);}
 #adminApp .badge-amber{background:var(--a-amber-light);color:var(--a-amber);}
 #adminApp .badge-red{background:var(--a-red-light);color:var(--a-red);}
-#adminApp .badge-gray{background:#F0EEEA;color:#555;}
-#adminApp .badge-gold{background:var(--a-gold-light);color:var(--a-amber);}
-#adminApp .section{background:var(--a-panel);border-radius:var(--a-radius);box-shadow:var(--a-shadow);border:1px solid var(--a-line);overflow:hidden;margin-bottom:16px;}
-#adminApp .section-header{padding:14px 20px;border-bottom:1px solid var(--a-line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:#FAFAF8;}
-#adminApp .section-header h3{font-size:14px;font-weight:600;}
+#adminApp .badge-gray{background:rgba(255,255,255,0.08);color:var(--a-muted);}
+#adminApp .badge-gold{background:var(--a-gold-light);color:var(--a-gold);}
+#adminApp .section{background:var(--a-panel);border-radius:var(--a-radius);box-shadow:var(--a-shadow);border:1px solid rgba(255,255,255,0.06);overflow:hidden;margin-bottom:16px;}
+#adminApp .section-header{padding:14px 20px;border-bottom:1px solid var(--a-line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;background:rgba(255,255,255,0.03);}
+#adminApp .section-header h3{font-size:14px;font-weight:600;color:var(--a-text);}
 #adminApp .section-body{padding:20px;}
 #adminApp .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px;}
 #adminApp .grid-2-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
 #adminApp .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
-#adminApp .mini{background:var(--a-bg);border-radius:var(--a-radius-sm);padding:14px;border:1px solid var(--a-line);}
+#adminApp .mini{background:rgba(0,0,0,0.25);border-radius:var(--a-radius-sm);padding:14px;border:1px solid var(--a-line);}
 #adminApp .mini .label{font-size:11px;color:var(--a-muted);font-weight:500;}
-#adminApp .mini .value{font-size:19px;font-weight:700;margin-top:5px;}
-#adminApp .alert-box{border:1px solid var(--a-line);border-left:3px solid var(--a-gold);padding:11px 14px;border-radius:var(--a-radius-sm);margin-bottom:10px;}
+#adminApp .mini .value{font-size:19px;font-weight:700;margin-top:5px;color:var(--a-text);}
+#adminApp .alert-box{border:1px solid var(--a-line);border-left:3px solid var(--a-gold);padding:11px 14px;border-radius:var(--a-radius-sm);margin-bottom:10px;background:rgba(201,168,76,0.07);}
 #adminApp .alert-box.danger{border-left-color:var(--a-red);background:var(--a-red-light);}
 #adminApp .alert-box.success{border-left-color:var(--a-green);background:var(--a-green-light);}
 #adminApp .alert-box.info{border-left-color:var(--a-blue);background:var(--a-blue-light);}
-#adminApp .alert-box strong{display:block;font-size:12px;font-weight:600;margin-bottom:3px;}
+#adminApp .alert-box strong{display:block;font-size:12px;font-weight:600;margin-bottom:3px;color:var(--a-text);}
 #adminApp .alert-box span{font-size:12px;color:var(--a-muted);}
 #adminApp .table-wrap{overflow-x:auto;}
 #adminApp table{width:100%;border-collapse:collapse;min-width:500px;}
-#adminApp th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--a-muted);text-transform:uppercase;letter-spacing:.05em;background:#FAFAF8;border-bottom:1px solid var(--a-line);}
-#adminApp td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--a-line);vertical-align:middle;}
+#adminApp th{text-align:left;padding:9px 12px;font-size:11px;font-weight:600;color:var(--a-muted);text-transform:uppercase;letter-spacing:.05em;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--a-line);}
+#adminApp td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--a-line);vertical-align:middle;color:var(--a-text);}
 #adminApp tr:last-child td{border-bottom:none;}
-#adminApp tr:hover td{background:#FAFAF8;}
+#adminApp tr:hover td{background:rgba(255,255,255,0.03);}
 #adminApp .pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:600;}
 #adminApp .pill-green{background:var(--a-green-light);color:var(--a-green);}
 #adminApp .pill-amber{background:var(--a-amber-light);color:var(--a-amber);}
 #adminApp .pill-red{background:var(--a-red-light);color:var(--a-red);}
-#adminApp .pill-gray{background:#F0EEEA;color:#555;}
+#adminApp .pill-gray{background:rgba(255,255,255,0.08);color:var(--a-muted);}
 #adminApp .pill-blue{background:var(--a-blue-light);color:var(--a-blue);}
 #adminApp .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;}
 #adminApp .form-grid .full{grid-column:1/-1;}
 #adminApp .field{display:flex;flex-direction:column;gap:5px;}
 #adminApp .field label{font-size:11px;font-weight:600;color:var(--a-muted);text-transform:uppercase;letter-spacing:.05em;}
-#adminApp input,#adminApp select,#adminApp textarea{padding:10px 12px;border:1.5px solid var(--a-line);border-radius:var(--a-radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--a-text);width:100%;transition:border-color .15s;outline:none;}
+#adminApp input,#adminApp select,#adminApp textarea{padding:10px 12px;border:1.5px solid var(--a-line);border-radius:var(--a-radius-sm);font-size:13px;font-family:'DM Sans',sans-serif;background:#1C1C1C;color:var(--a-text);width:100%;transition:border-color .15s;outline:none;}
+#adminApp select option{background:#262626;color:var(--a-text);}
 #adminApp input:focus,#adminApp select:focus,#adminApp textarea:focus{border-color:var(--a-gold);}
-#adminApp input:read-only{background:var(--a-bg);cursor:not-allowed;}
+#adminApp input:read-only{background:rgba(255,255,255,0.04);cursor:not-allowed;}
 #adminApp .field-error{font-size:11px;color:var(--a-red);margin-top:2px;display:none;}
 #adminApp .field-error.show{display:block;}
 #adminApp .btn{border:none;background:var(--a-accent);color:#fff;padding:9px 16px;border-radius:var(--a-radius-sm);cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
@@ -324,18 +346,18 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .notify.error{background:var(--a-red-light);color:var(--a-red);}
 #adminApp .empty-state{text-align:center;padding:40px 20px;color:var(--a-muted);font-size:13px;}
 #adminApp .empty-state .icon{font-size:28px;margin-bottom:10px;}
-#adminApp .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9100;align-items:center;justify-content:center;}
+#adminApp .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9100;align-items:center;justify-content:center;}
 #adminApp .modal-overlay.open{display:flex;}
 #adminApp .modal{background:var(--a-panel);border-radius:var(--a-radius);padding:24px;width:90%;max-width:460px;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
 #adminApp .modal h3{font-size:17px;font-weight:600;margin-bottom:14px;}
 #adminApp .modal-actions{display:flex;gap:10px;margin-top:16px;justify-content:flex-end;}
 #adminApp .a-hamburger{display:none;background:var(--a-accent);color:#fff;border:none;padding:9px 13px;cursor:pointer;font-size:18px;position:fixed;top:12px;left:12px;z-index:200;border-radius:8px;}
 #adminApp .sidebar-close-btn{display:none;}
-#adminApp .view-banner{background:var(--a-gold-light);border-bottom:1px solid rgba(201,168,76,0.3);padding:8px 20px;font-size:12px;color:var(--a-amber);display:flex;align-items:center;gap:8px;font-weight:600;}
+#adminApp .view-banner{background:var(--a-gold-light);border-bottom:1px solid rgba(201,168,76,0.3);padding:8px 20px;font-size:12px;color:var(--a-gold);display:flex;align-items:center;gap:8px;font-weight:600;}
 #adminApp .loading-row td{text-align:center;color:var(--a-muted);padding:30px;font-style:italic;}
 #adminApp .sync-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;display:inline-block;margin-right:4px;animation:pulse 2s ease-in-out infinite;}
 #adminApp .report-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
-#adminApp .upload-box{border:1px dashed var(--a-line);padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;margin-bottom:14px;border-radius:var(--a-radius-sm);background:var(--a-bg);}
+#adminApp .upload-box{border:1px dashed var(--a-line);padding:28px 20px;text-align:center;cursor:pointer;transition:all 0.3s;position:relative;margin-bottom:14px;border-radius:var(--a-radius-sm);background:rgba(255,255,255,0.03);}
 #adminApp .upload-box:hover,#adminApp .upload-box.drag{border-color:var(--a-gold);background:var(--a-gold-light);}
 #adminApp .upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
 #adminApp .upload-icon-txt{font-size:24px;color:var(--a-amber);margin-bottom:8px;}
@@ -677,11 +699,11 @@ footer b{color:var(--gold);font-weight:400;}
         <div class="topbar-left"><h2>Dashboard</h2><p>Muhtasari wa biashara ya Alyah's Fashion Hub</p></div>
       </div>
       <div class="cards" style="grid-template-columns:repeat(5,1fr);">
-        <div class="card"><div class="c-label">Jumla ya Manunuzi</div><div class="c-value" id="cardManunuzi">—</div><span class="c-badge badge-gray">Gharama za Bidhaa</span></div>
-        <div class="card"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="cardMauzo">—</div><span class="c-badge badge-green">Mapato</span></div>
-        <div class="card"><div class="c-label">Faida Halisi</div><div class="c-value" id="cardFaida">—</div><span class="c-badge" id="faidaBadge">—</span></div>
-        <div class="card"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="cardMadeni">—</div><span class="c-badge badge-amber">Mkopo</span></div>
-        <div class="card" style="border-left:3px solid var(--a-green)"><div class="c-label">💵 Hela Cash Biashara</div><div class="c-value" id="cardCash" style="color:var(--a-green)">—</div><span class="c-badge badge-green" style="font-size:10px">Mauzo Cash + Malipo − Matumizi − Manunuzi</span></div>
+        <div class="card c-gray"><div class="c-label">Jumla ya Manunuzi</div><div class="c-value" id="cardManunuzi">—</div><span class="c-badge badge-gray">Gharama za Bidhaa</span></div>
+        <div class="card c-green"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="cardMauzo">—</div><span class="c-badge badge-green">Mapato</span></div>
+        <div class="card c-gold"><div class="c-label">Faida Halisi</div><div class="c-value" id="cardFaida">—</div><span class="c-badge" id="faidaBadge">—</span></div>
+        <div class="card c-red"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="cardMadeni">—</div><span class="c-badge badge-amber">Mkopo</span></div>
+        <div class="card c-green"><div class="c-label">💵 Hela Cash Biashara</div><div class="c-value" id="cardCash">—</div><span class="c-badge badge-green" style="font-size:10px">Mauzo Cash + Malipo − Matumizi − Manunuzi</span></div>
       </div>
       <div class="grid-2">
         <div class="section">
@@ -918,10 +940,10 @@ footer b{color:var(--gold);font-weight:400;}
         </div>
       </div>
       <div class="cards" style="margin-top:16px">
-        <div class="card"><div class="c-label">Manunuzi ya Siku</div><div class="c-value" id="ks-manunuzi">—</div><span class="c-badge badge-gray">Bidhaa Zilizoingia</span></div>
-        <div class="card"><div class="c-label">Mauzo ya Cash</div><div class="c-value" id="ks-taslimu">—</div><span class="c-badge badge-green">Cash</span></div>
-        <div class="card"><div class="c-label">Mauzo ya Mkopo</div><div class="c-value" id="ks-mkopo">—</div><span class="c-badge badge-amber">Mkopo</span></div>
-        <div class="card"><div class="c-label">Hali ya Siku</div><div class="c-value" id="ks-hali">—</div><span class="c-badge" id="ks-hali-badge">—</span></div>
+        <div class="card c-gray"><div class="c-label">Manunuzi ya Siku</div><div class="c-value" id="ks-manunuzi">—</div><span class="c-badge badge-gray">Bidhaa Zilizoingia</span></div>
+        <div class="card c-green"><div class="c-label">Mauzo ya Cash</div><div class="c-value" id="ks-taslimu">—</div><span class="c-badge badge-green">Cash</span></div>
+        <div class="card c-amber"><div class="c-label">Mauzo ya Mkopo</div><div class="c-value" id="ks-mkopo">—</div><span class="c-badge badge-amber">Mkopo</span></div>
+        <div class="card c-blue"><div class="c-label">Hali ya Siku</div><div class="c-value" id="ks-hali">—</div><span class="c-badge" id="ks-hali-badge">—</span></div>
       </div>
       <div class="grid-2">
         <div class="section">
@@ -975,12 +997,12 @@ footer b{color:var(--gold);font-weight:400;}
         </div>
       </div>
       <div class="report-grid">
-        <div class="card"><div class="c-label">Jumla ya Manunuzi</div><div class="c-value" id="rep-manunuzi">—</div></div>
-        <div class="card"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="rep-mauzo">—</div></div>
-        <div class="card"><div class="c-label">Jumla ya Matumizi</div><div class="c-value" id="rep-gharama">—</div></div>
-        <div class="card"><div class="c-label">Faida ya Jumla</div><div class="c-value" id="rep-faida-j">—</div></div>
-        <div class="card"><div class="c-label">Faida Halisi</div><div class="c-value" id="rep-faida-h">—</div></div>
-        <div class="card"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="rep-madeni">—</div></div>
+        <div class="card c-gray"><div class="c-label">Jumla ya Manunuzi</div><div class="c-value" id="rep-manunuzi">—</div></div>
+        <div class="card c-green"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="rep-mauzo">—</div></div>
+        <div class="card c-amber"><div class="c-label">Jumla ya Matumizi</div><div class="c-value" id="rep-gharama">—</div></div>
+        <div class="card c-blue"><div class="c-label">Faida ya Jumla</div><div class="c-value" id="rep-faida-j">—</div></div>
+        <div class="card c-gold"><div class="c-label">Faida Halisi</div><div class="c-value" id="rep-faida-h">—</div></div>
+        <div class="card c-red"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="rep-madeni">—</div></div>
       </div>
       <div class="section">
         <div class="section-header"><h3>📐 Mfumo wa Mahesabu</h3></div>
