@@ -895,8 +895,8 @@ footer b{color:var(--gold);font-weight:400;}
         </div>
         <div class="section-body">
           <div class="table-wrap"><table>
-            <thead><tr><th></th><th>Bidhaa</th><th>Aina</th><th>Bei Kununulia</th><th>Bei Kuuzia</th><th>Faida %</th><th>Idadi</th><th>Hali</th><th>Dukani</th></tr></thead>
-            <tbody id="tbody-stock"><tr class="loading-row"><td colspan="9">Inapakia...</td></tr></tbody>
+            <thead><tr><th></th><th>Bidhaa</th><th>Aina</th><th>Bei Kununulia</th><th>Bei Kuuzia</th><th>Faida %</th><th>Idadi</th><th>Hali</th><th>Dukani</th><th>Kitendo</th></tr></thead>
+            <tbody id="tbody-stock"><tr class="loading-row"><td colspan="10">Inapakia...</td></tr></tbody>
           </table></div>
         </div>
       </div>
@@ -1062,6 +1062,39 @@ footer b{color:var(--gold);font-weight:400;}
     <div class="modal-actions">
       <button class="btn secondary" onclick="fungaAdminModal()">Ghairi</button>
       <button class="btn danger" id="btn-thibitisha-reject">Kataa Agizo</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT STOCK -->
+<div class="modal-overlay" id="modalEditStock">
+  <div class="modal" style="max-width:520px;">
+    <h3>✏ Hariri Bidhaa</h3>
+    <input type="hidden" id="es-id"/>
+    <div class="form-grid">
+      <div class="field full"><label>Jina la Bidhaa</label><input type="text" id="es-jina" placeholder="Jina la bidhaa"/></div>
+      <div class="field"><label>Aina</label>
+        <select id="es-aina">
+          <option>Nguo</option><option>Viatu</option><option>Nywele</option><option>Mengineyo</option>
+        </select>
+      </div>
+      <div class="field"><label>Idadi Iliyobaki</label><input type="number" id="es-idadi" min="0" placeholder="0"/></div>
+      <div class="field"><label>Bei ya Kununulia (TZS)</label><input type="number" id="es-bei-k" placeholder="0"/></div>
+      <div class="field"><label>Bei ya Kuuzia (TZS)</label><input type="number" id="es-bei-u" placeholder="0"/></div>
+      <div class="field"><label>Kiwango cha Chini (Tahadhari)</label><input type="number" id="es-kiwango" min="0" placeholder="2"/></div>
+      <div class="field"><label>Kategoria (Dukani)</label>
+        <select id="es-kategoria">
+          <option value="dress">Dress</option>
+          <option value="abaya">Abaya</option>
+          <option value="outfit">Outfit</option>
+          <option value="wedding">Bridal</option>
+        </select>
+      </div>
+      <div class="field"><label>Lebo / Badge (hiari)</label><input type="text" id="es-badge" placeholder="mfano: New Arrival"/></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn secondary" onclick="fungaAdminModal()">Ghairi</button>
+      <button class="btn gold" onclick="thibitishaEditStock()">💾 Hifadhi Mabadiliko</button>
     </div>
   </div>
 </div>
@@ -1801,6 +1834,41 @@ async function toggleDukani(id){
 }
 
 // ════════════════════════════════════════════════════════════════
+// EDIT STOCK
+// ════════════════════════════════════════════════════════════════
+function funguaEditStock(id){
+  const p=allBidhaa.find(x=>x.id===id);if(!p)return;
+  $('es-id').value=p.id;
+  $('es-jina').value=p.jina||'';
+  $('es-aina').value=p.aina||'Nguo';
+  $('es-idadi').value=p.idadi??0;
+  $('es-bei-k').value=p.bei_kununulia||0;
+  $('es-bei-u').value=p.bei_kuuzia||0;
+  $('es-kiwango').value=p.kiwango_chini??2;
+  $('es-kategoria').value=p.category||'dress';
+  $('es-badge').value=p.badge||'';
+  $('modalEditStock').classList.add('open');
+}
+async function thibitishaEditStock(){
+  const id=$('es-id').value;
+  const jina=$('es-jina').value.trim();
+  const aina=$('es-aina').value;
+  const idadi=parseInt($('es-idadi').value)||0;
+  const bei_k=parseInt($('es-bei-k').value)||0;
+  const bei_u=parseInt($('es-bei-u').value)||0;
+  const kiwango=parseInt($('es-kiwango').value)||2;
+  const category=$('es-kategoria').value;
+  const badge=$('es-badge').value.trim()||null;
+  if(!jina){toast('Weka jina la bidhaa');return;}
+  try{
+    await DB.patch('bidhaa',`id=eq.${id}`,{jina,aina,idadi,bei_kununulia:bei_k,bei_kuuzia:bei_u,kiwango_chini:kiwango,category,badge});
+    fungaAdminModal();
+    toast('✅ Bidhaa imeharirishwa!');
+    await loadAll();
+  }catch(e){toast('❌ Hitilafu: '+e.message);}
+}
+
+// ════════════════════════════════════════════════════════════════
 // RENDER FUNCTIONS (admin tables) — unchanged logic from hesabu.html
 // ════════════════════════════════════════════════════════════════
 function renderDashibodi(){
@@ -1869,8 +1937,9 @@ function renderStock(){
     return`<tr><td><img src="${p.img||blank}" style="width:34px;height:42px;object-fit:cover;border-radius:4px" onerror="this.src='${blank}'"/></td><td><strong>${p.jina}</strong></td><td>${p.aina}</td><td>${pesa(p.bei_kununulia)}</td><td>${pesa(p.bei_kuuzia)}</td>
     <td><span class="pill ${fp>=30?'pill-green':fp>=15?'pill-amber':'pill-red'}">${fp}%</span></td>
     <td><strong>${p.idadi}</strong></td><td>${badge}</td>
-    <td><div class="toggle-wrap"><div class="toggle${p.onyesha_dukani?' on':''}" onclick="toggleDukani('${p.id}')"></div></div></td></tr>`;
-  }).join(''):safuTupu(9,'Hakuna bidhaa. Zinaongezwa ukifanya ununuzi.');
+    <td><div class="toggle-wrap"><div class="toggle${p.onyesha_dukani?' on':''}" onclick="toggleDukani('${p.id}')"></div></div></td>
+    <td><button class="btn sm gold" onclick="funguaEditStock('${p.id}')">✏ Hariri</button></td></tr>`;
+  }).join(''):safuTupu(10,'Hakuna bidhaa. Zinaongezwa ukifanya ununuzi.');
 }
 
 function renderWateja(){
