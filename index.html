@@ -246,7 +246,7 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .brand-name{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;line-height:1.2;}
 #adminApp .brand-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
 #adminApp .mode-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:rgba(201,168,76,0.2);color:var(--a-gold);border:1px solid rgba(201,168,76,0.3);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
-#adminApp .nav{padding:10px 8px;flex:1;}
+#adminApp .nav{position:static;top:auto;left:auto;right:auto;height:auto;z-index:auto;backdrop-filter:none;display:block;justify-content:flex-start;align-items:stretch;padding:10px 8px;flex:1;border-bottom:none;background:transparent;}
 #adminApp .nav-section{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:12px 10px 6px;font-weight:600;}
 #adminApp .nav-btn{width:100%;border:none;background:transparent;color:rgba(255,255,255,0.55);text-align:left;padding:10px 12px;margin-bottom:1px;border-radius:var(--a-radius-sm);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s;display:flex;align-items:center;gap:9px;}
 #adminApp .nav-btn:hover{background:rgba(255,255,255,0.07);color:#fff;}
@@ -1294,10 +1294,10 @@ async function placeOrder(){
         chanzo:'Duka',hali_order:'Inasubiri',bidhaa_id:p.id,size:it.size
       });
     }
-    orderWhatsApp();
     const jumlaYote=cart.reduce((s,i)=>s+i.price*i.qty,0);
     const orderSummary=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
-    sendSms(ADMIN_PHONE,`Agizo Jipya - Alyah's Fashion Hub: ${orderSummary}. Jumla: TZS ${jumlaYote.toLocaleString()}. Simu ya mteja: ${phone}. Tembelea admin panel kuthibitisha.`);
+    await sendSms(ADMIN_PHONE,`Agizo Jipya - Alyah's Fashion Hub: ${orderSummary}. Jumla: TZS ${jumlaYote.toLocaleString()}. Simu ya mteja: ${phone}. Tembelea admin panel kuthibitisha.`);
+    orderWhatsApp();
     toast('✅ Agizo limetumwa! Tutakuthibitishia hivi karibuni.');
     cart=[];updateCartUI();renderCart();closeCart();
   }catch(e){
@@ -1721,9 +1721,9 @@ async function thibitishaOrder(id){
         await DB.post('wateja',{jina,simu:o.simu_mteja||'Haijasemwa',deni_lote:o.jumla,kilicholipwa:o.kilicholipwa||0,bakaa:o.bakaa,tarehe_mwisho:null,hali:o.bakaa===0?'Amelipa Kamili':'Hajalipa'});
       }
     }
-    sendSms(ADMIN_PHONE,`Imethibitishwa: ${o.jina} x${o.idadi} (TZS ${Number(o.jumla).toLocaleString()}) kwa mteja ${o.simu_mteja||'N/A'}.`);
+    await sendSms(ADMIN_PHONE,`Imethibitishwa: ${o.jina} x${o.idadi} (TZS ${Number(o.jumla).toLocaleString()}) kwa mteja ${o.simu_mteja||'N/A'}.`);
     if(o.simu_mteja){
-      sendSms(o.simu_mteja,`Habari kutoka Alyah's Fashion Hub! Agizo lako la ${o.jina} (x${o.idadi}, TZS ${Number(o.jumla).toLocaleString()}) limethibitishwa. Tutawasiliana nawe kwa WhatsApp kuhusu malipo na delivery. Asante!`);
+      await sendSms(o.simu_mteja,`Habari kutoka Alyah's Fashion Hub! Agizo lako la ${o.jina} (x${o.idadi}, TZS ${Number(o.jumla).toLocaleString()}) limethibitishwa. Tutawasiliana nawe kwa WhatsApp kuhusu malipo na delivery. Asante!`);
     }
     toast(`✅ Agizo la "${o.jina}" limethibitishwa — stock imepunguzwa.`);
     await loadAll();
