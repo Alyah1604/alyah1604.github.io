@@ -102,6 +102,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(28,28,28,0.
 .product-img-wrap{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--dark3);}
 .product-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s ease;}
 .product-card:hover .product-img-wrap img{transform:scale(1.06);}
+.product-img-wrap video{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s ease;}
+.product-card:hover .product-img-wrap video{transform:scale(1.06);}
 .product-badge{position:absolute;top:14px;left:14px;background:var(--gold);color:var(--dark);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;font-weight:600;border-radius:2px;}
 .taken-stamp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(28,28,28,0.75);}
 .taken-stamp span{border:2px solid var(--gold);color:var(--gold);font-size:13px;letter-spacing:5px;text-transform:uppercase;padding:10px 22px;font-weight:600;transform:rotate(-15deg);}
@@ -246,7 +248,7 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .brand-name{font-family:'DM Serif Display',serif;font-size:18px;color:#fff;line-height:1.2;}
 #adminApp .brand-sub{font-size:11px;color:rgba(255,255,255,0.4);margin-top:3px;}
 #adminApp .mode-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:rgba(201,168,76,0.2);color:var(--a-gold);border:1px solid rgba(201,168,76,0.3);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
-#adminApp .nav{position:static;top:auto;left:auto;right:auto;height:auto;z-index:auto;backdrop-filter:none;display:block;justify-content:flex-start;align-items:stretch;padding:10px 8px;flex:1;border-bottom:none;background:transparent;}
+#adminApp .nav{padding:10px 8px;flex:1;}
 #adminApp .nav-section{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.3);padding:12px 10px 6px;font-weight:600;}
 #adminApp .nav-btn{width:100%;border:none;background:transparent;color:rgba(255,255,255,0.55);text-align:left;padding:10px 12px;margin-bottom:1px;border-radius:var(--a-radius-sm);cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s;display:flex;align-items:center;gap:9px;}
 #adminApp .nav-btn:hover{background:rgba(255,255,255,0.07);color:#fff;}
@@ -579,6 +581,7 @@ footer b{color:var(--gold);font-weight:400;}
 <div class="modal-bg" id="modalBg" onclick="closeBgModal(event)">
   <div class="modal-box">
     <img class="modal-photo" id="mPhoto" src="" alt=""/>
+    <video class="modal-photo" id="mVideo" src="" controls style="display:none;"></video>
     <div class="modal-info">
       <button class="close-btn" onclick="closeModal()">✕</button>
       <span class="modal-cat" id="mCat"></span>
@@ -857,13 +860,13 @@ footer b{color:var(--gold);font-weight:400;}
       <div class="topbar"><div class="topbar-left"><h2>Stock / Bidhaa</h2><p>Simamia hifadhi yako na bidhaa zinazoonekana dukani.</p></div></div>
 
       <div class="section">
-        <div class="section-header"><h3>📸 Pakia Bidhaa Mpya kwa Picha (itaonekana Dukani)</h3></div>
+        <div class="section-header"><h3>📸🎬 Pakia Bidhaa Mpya kwa Picha au Video (itaonekana Dukani)</h3></div>
         <div class="section-body">
-          <p style="font-size:12px;color:var(--a-muted);margin-bottom:14px;">Hii itaongeza bidhaa kwenye Stock <strong>na</strong> kuionyesha papo hapo kwenye duka la mtandaoni kwa wateja.</p>
+          <p style="font-size:12px;color:var(--a-muted);margin-bottom:14px;">Hii itaongeza bidhaa kwenye Stock <strong>na</strong> kuionyesha papo hapo kwenye duka la mtandaoni kwa wateja. Inakubali picha <strong>na</strong> video.</p>
           <div class="upload-box" id="uploadBox">
-            <input type="file" id="fileInput" accept="image/*" onchange="onFilePick(this)"/>
+            <input type="file" id="fileInput" accept="image/*,video/*" onchange="onFilePick(this)"/>
             <div class="upload-icon-txt">↑</div>
-            <p class="upload-hint">Bonyeza au buruta picha hapa</p>
+            <p class="upload-hint">Bonyeza au buruta picha au video hapa</p>
           </div>
           <div class="previews" id="previews"></div>
           <div class="form-grid">
@@ -1115,6 +1118,7 @@ const PRESET='alyahabubakar';
 const SIZES=['XS','S','M','L','XL','XXL'];
 const WA='255748863304';
 const ADMIN_PHONE='0748863304';
+const ADMIN_PHONE2='0694339402';
 // Edge Function proxy — keeps Beem API key off the frontend
 const SMS_FN_URL='https://xfenepdrtqkqxqicqukh.supabase.co/functions/v1/send-sms';
 
@@ -1124,7 +1128,7 @@ async function sendSms(to,message){
   try{
     const r=await fetch(SMS_FN_URL,{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY},
       body:JSON.stringify({to,message})
     });
     const data=await r.json();
@@ -1134,6 +1138,9 @@ async function sendSms(to,message){
     console.warn('SMS send failed:',e.message);
     return null;
   }
+}
+async function sendAdminSms(msg){
+  return Promise.all([ADMIN_PHONE,ADMIN_PHONE2].map(n=>sendSms(n,msg)));
 }
 const CAT_LABEL={dress:'Dress',abaya:'Abaya',outfit:'Outfit',wedding:'Bridal'};
 
@@ -1204,7 +1211,7 @@ function renderGrid(f='all'){
     const ic=cart.some(c=>c.id===p.id);
     return `<div class="product-card fade-in${soldOut?' taken':''}" style="transition-delay:${i*0.06}s">
       <div class="product-img-wrap">
-        <img src="${p.img||blank}" alt="${p.jina}" loading="lazy" onerror="this.src='${blank}'"/>
+        ${p.video?`<video src="${p.video}" autoplay muted loop playsinline style="pointer-events:none;"></video>`:`<img src="${p.img||blank}" alt="${p.jina}" loading="lazy" onerror="this.src='${blank}'"/>`}
         ${p.badge?`<span class="product-badge">${p.badge}</span>`:''}
         ${soldOut?`<div class="taken-stamp"><span>Taken</span></div>`:`<div class="product-hover-overlay"><button class="quickview-btn" onclick="openModal('${p.id}')">Quick View</button></div>`}
       </div>
@@ -1294,10 +1301,11 @@ async function placeOrder(){
         chanzo:'Duka',hali_order:'Inasubiri',bidhaa_id:p.id,size:it.size
       });
     }
+    orderWhatsApp();
     const jumlaYote=cart.reduce((s,i)=>s+i.price*i.qty,0);
     const orderSummary=cart.map(i=>`${i.name} x${i.qty}`).join(', ');
-    await sendSms(ADMIN_PHONE,`Agizo Jipya - Alyah's Fashion Hub: ${orderSummary}. Jumla: TZS ${jumlaYote.toLocaleString()}. Simu ya mteja: ${phone}. Tembelea admin panel kuthibitisha.`);
-    orderWhatsApp();
+    sendAdminSms(`Agizo Jipya - Alyah's Fashion Hub: ${orderSummary}. Jumla: TZS ${jumlaYote.toLocaleString()}. Simu ya mteja: ${phone}. Tembelea admin panel kuthibitisha.`);
+    sendSms(phone,`Asante!Alyah's Fashion Hub imepokea order yako,naifanyia kazi nitakurudia ndani ya mda mfupi`);
     toast('✅ Agizo limetumwa! Tutakuthibitishia hivi karibuni.');
     cart=[];updateCartUI();renderCart();closeCart();
   }catch(e){
@@ -1317,7 +1325,8 @@ function orderWhatsApp(){
 function openModal(id){
   const p=allBidhaa.find(x=>x.id===id);if(!p)return;
   modalProduct=p;modalSize='M';
-  $('mPhoto').src=p.img;
+  if(p.video){$('mPhoto').style.display='none';$('mVideo').src=p.video;$('mVideo').style.display='block';}
+  else{$('mPhoto').src=p.img||'';$('mPhoto').style.display='block';$('mVideo').style.display='none';}
   $('mName').textContent=p.jina;
   $('mPrice').textContent='TZS '+Number(p.bei_kuuzia).toLocaleString()+'/=';
   $('mCat').textContent=(CAT_LABEL[p.category]||p.category||'').toUpperCase();
@@ -1336,7 +1345,7 @@ function addFromModal(){
   updateCartUI();renderGrid(curFilter);closeModal();toast(modalProduct.jina+' added to cart');
 }
 function closeBgModal(e){if(e.target===$('modalBg'))closeModal();}
-function closeModal(){$('modalBg').classList.remove('open');}
+function closeModal(){$('modalBg').classList.remove('open');const v=$('mVideo');if(v){v.pause();v.src='';v.style.display='none';}$('mPhoto').style.display='block';}
 
 // ─── MOBILE MENU ───────────────────────────────────────────────
 function toggleMobile(){$('mobileMenu').classList.toggle('open');}
@@ -1721,9 +1730,9 @@ async function thibitishaOrder(id){
         await DB.post('wateja',{jina,simu:o.simu_mteja||'Haijasemwa',deni_lote:o.jumla,kilicholipwa:o.kilicholipwa||0,bakaa:o.bakaa,tarehe_mwisho:null,hali:o.bakaa===0?'Amelipa Kamili':'Hajalipa'});
       }
     }
-    await sendSms(ADMIN_PHONE,`Imethibitishwa: ${o.jina} x${o.idadi} (TZS ${Number(o.jumla).toLocaleString()}) kwa mteja ${o.simu_mteja||'N/A'}.`);
+    sendAdminSms(`Imethibitishwa: ${o.jina} x${o.idadi} (TZS ${Number(o.jumla).toLocaleString()}) kwa mteja ${o.simu_mteja||'N/A'}.`);
     if(o.simu_mteja){
-      await sendSms(o.simu_mteja,`Habari kutoka Alyah's Fashion Hub! Agizo lako la ${o.jina} (x${o.idadi}, TZS ${Number(o.jumla).toLocaleString()}) limethibitishwa. Tutawasiliana nawe kwa WhatsApp kuhusu malipo na delivery. Asante!`);
+      sendSms(o.simu_mteja,`Habari kutoka Alyah's Fashion Hub! Agizo lako la ${o.jina} (x${o.idadi}, TZS ${Number(o.jumla).toLocaleString()}) limethibitishwa. Tutawasiliana nawe kwa WhatsApp kuhusu malipo na delivery. Asante!`);
     }
     toast(`✅ Agizo la "${o.jina}" limethibitishwa — stock imepunguzwa.`);
     await loadAll();
@@ -1749,24 +1758,26 @@ async function kataaOrder(id){
 // ════════════════════════════════════════════════════════════════
 // PRODUCT PHOTO UPLOAD (Cloudinary) — adds to Stock + shows in Duka
 // ════════════════════════════════════════════════════════════════
-function uploadPhoto(file){
+function uploadMedia(file){
+  const isVideo=file.type.startsWith('video/');
+  const resource=isVideo?'video':'image';
   return new Promise((resolve,reject)=>{
     const fd=new FormData();
     fd.append('file',file);
     fd.append('upload_preset',PRESET);
     fd.append('cloud_name',CLD);
     const xhr=new XMLHttpRequest();
-    xhr.open('POST',`https://api.cloudinary.com/v1_1/${CLD}/image/upload`,true);
-    xhr.timeout=60000;
+    xhr.open('POST',`https://api.cloudinary.com/v1_1/${CLD}/${resource}/upload`,true);
+    xhr.timeout=isVideo?180000:60000;
     xhr.onload=()=>{
       try{
         const d=JSON.parse(xhr.responseText);
-        if(d.secure_url)resolve(d.secure_url);
+        if(d.secure_url)resolve({url:d.secure_url,isVideo});
         else reject(new Error(d.error?.message||'Upload failed — check Cloudinary preset is Unsigned'));
       }catch(e){reject(new Error('Invalid response from Cloudinary'));}
     };
     xhr.onerror=()=>reject(new Error('Network error — check internet connection'));
-    xhr.ontimeout=()=>reject(new Error('Upload timed out — try a smaller photo'));
+    xhr.ontimeout=()=>reject(new Error(isVideo?'Video upload timed out — try a smaller file':'Upload timed out — try a smaller photo'));
     xhr.send(fd);
   });
 }
@@ -1778,7 +1789,11 @@ function onFilePick(input){
 function renderPreviews(){
   if(!uploadFile){$('previews').innerHTML='';return;}
   const url=URL.createObjectURL(uploadFile);
-  $('previews').innerHTML=`<div class="preview-item"><img src="${url}"/><button class="preview-rm" onclick="removePreview()">✕</button></div>`;
+  const isVideo=uploadFile.type.startsWith('video/');
+  $('previews').innerHTML=`<div class="preview-item">${isVideo
+    ?`<video src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--a-radius-sm)" muted playsinline controls></video>`
+    :`<img src="${url}"/>`
+  }<button class="preview-rm" onclick="removePreview()">✕</button></div>`;
 }
 function removePreview(){uploadFile=null;$('fileInput').value='';renderPreviews();}
 
@@ -1787,7 +1802,7 @@ ub.addEventListener('dragover',e=>{e.preventDefault();ub.classList.add('drag');}
 ub.addEventListener('dragleave',()=>ub.classList.remove('drag'));
 ub.addEventListener('drop',e=>{
   e.preventDefault();ub.classList.remove('drag');
-  const f=Array.from(e.dataTransfer.files).find(f=>f.type.startsWith('image/'));
+  const f=Array.from(e.dataTransfer.files).find(f=>f.type.startsWith('image/')||f.type.startsWith('video/'));
   if(f){uploadFile=f;renderPreviews();}
 });
 
@@ -1800,16 +1815,18 @@ async function saveProductWithPhoto(){
   const badge=$('p-badge').value.trim();
   if(!jina){toast('Weka jina la bidhaa');return;}
   if(!bei){toast('Weka bei ya kuuzia');return;}
-  if(!uploadFile){toast('Pakia picha ya bidhaa');return;}
+  if(!uploadFile){toast('Pakia picha au video ya bidhaa');return;}
 
+  const isVideo=uploadFile.type.startsWith('video/');
   const btn=$('p-save-btn'),status=$('p-status');
-  btn.disabled=true;status.textContent='Inapakia picha...';
+  btn.disabled=true;status.textContent=isVideo?'Inapakia video (subiri kidogo)...':'Inapakia picha...';
   try{
-    const img=await uploadPhoto(uploadFile);
+    const {url,isVideo:vid}=await uploadMedia(uploadFile);
     status.textContent='Inahifadhi...';
     const bei_u=parseInt(bei);
     const bei_k=beiGharama||bei_u;
-    await DB.post('bidhaa',{jina,aina:'Nguo',bei_kununulia:bei_k,bei_kuuzia:bei_u,idadi,kiwango_chini:2,img,category,badge,onyesha_dukani:true});
+    const mediaFields=vid?{video:url,img:null}:{img:url,video:null};
+    await DB.post('bidhaa',{jina,aina:'Nguo',bei_kununulia:bei_k,bei_kuuzia:bei_u,idadi,kiwango_chini:2,...mediaFields,category,badge,onyesha_dukani:true});
     // Also log as a purchase so it reflects correctly in Manunuzi/Ripoti
     await DB.post('manunuzi',{tarehe:leoISO(),jina,aina:'Nguo',idadi,bei_kununulia:bei_k,jumla:bei_k*idadi,msambazaji:'Stock ya Awali'});
     status.textContent='';
@@ -1827,7 +1844,7 @@ async function saveProductWithPhoto(){
 
 async function toggleDukani(id){
   const p=allBidhaa.find(x=>x.id===id);if(!p)return;
-  if(!p.onyesha_dukani&&!p.img){toast('Ongeza picha kwanza kabla ya kuonyesha dukani');return;}
+  if(!p.onyesha_dukani&&!p.img&&!p.video){toast('Ongeza picha au video kwanza kabla ya kuonyesha dukani');return;}
   await DB.patch('bidhaa',`id=eq.${id}`,{onyesha_dukani:!p.onyesha_dukani});
   toast(p.onyesha_dukani?'Imeondolewa Dukani':'Inaonekana Dukani sasa');
   await loadAll();
@@ -1934,7 +1951,7 @@ function renderStock(){
   $('tbody-stock').innerHTML=list.length?list.map(p=>{
     const fp=p.bei_kuuzia>0?Math.round(((p.bei_kuuzia-p.bei_kununulia)/p.bei_kuuzia)*100):0;
     const badge=p.idadi===0?'<span class="pill pill-red">Imekwisha</span>':p.idadi<=p.kiwango_chini?'<span class="pill pill-amber">Ndogo</span>':'<span class="pill pill-green">Ipo ✓</span>';
-    return`<tr><td><img src="${p.img||blank}" style="width:34px;height:42px;object-fit:cover;border-radius:4px" onerror="this.src='${blank}'"/></td><td><strong>${p.jina}</strong></td><td>${p.aina}</td><td>${pesa(p.bei_kununulia)}</td><td>${pesa(p.bei_kuuzia)}</td>
+    return`<tr><td>${p.video?`<video src="${p.video}" style="width:34px;height:42px;object-fit:cover;border-radius:4px" muted></video>`:`<img src="${p.img||blank}" style="width:34px;height:42px;object-fit:cover;border-radius:4px" onerror="this.src='${blank}'"/>`}</td><td><strong>${p.jina}</strong></td><td>${p.aina}</td><td>${pesa(p.bei_kununulia)}</td><td>${pesa(p.bei_kuuzia)}</td>
     <td><span class="pill ${fp>=30?'pill-green':fp>=15?'pill-amber':'pill-red'}">${fp}%</span></td>
     <td><strong>${p.idadi}</strong></td><td>${badge}</td>
     <td><div class="toggle-wrap"><div class="toggle${p.onyesha_dukani?' on':''}" onclick="toggleDukani('${p.id}')"></div></div></td>
