@@ -301,6 +301,7 @@ footer b{color:var(--gold);font-weight:400;}
 #adminApp .section-body{padding:20px;}
 #adminApp .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:16px;}
 #adminApp .grid-2-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+#adminApp .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
 #adminApp .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
 #adminApp .mini{background:rgba(0,0,0,0.25);border-radius:var(--a-radius-sm);padding:14px;border:1px solid var(--a-line);}
 #adminApp .mini .label{font-size:11px;color:var(--a-muted);font-weight:500;}
@@ -459,11 +460,13 @@ footer b{color:var(--gold);font-weight:400;}
   /* !important overrides any inline style="grid-template-columns:..." on .cards */
   #adminApp .cards{grid-template-columns:repeat(2,1fr) !important;}
   #adminApp .grid-2,#adminApp .grid-2-equal{grid-template-columns:1fr;}
+  #adminApp .grid-3{grid-template-columns:1fr 1fr;}
   #adminApp .report-grid{grid-template-columns:repeat(2,1fr);}
   #adminApp .form-grid{grid-template-columns:1fr;}
 }
 @media(max-width:540px){
   #adminApp .cards{grid-template-columns:1fr !important;}
+  #adminApp .grid-3{grid-template-columns:1fr;}
   #adminApp .report-grid{grid-template-columns:1fr;}
   #adminApp .summary-grid{grid-template-columns:1fr;}
   #adminApp .topbar{flex-direction:column;align-items:flex-start;}
@@ -707,7 +710,7 @@ footer b{color:var(--gold);font-weight:400;}
         <div class="card c-green"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="cardMauzo">—</div><span class="c-badge badge-green">Mapato</span></div>
         <div class="card c-gold"><div class="c-label">Faida Halisi</div><div class="c-value" id="cardFaida">—</div><span class="c-badge" id="faidaBadge">—</span></div>
         <div class="card c-red"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="cardMadeni">—</div><span class="c-badge badge-amber">Mkopo</span></div>
-        <div class="card c-green"><div class="c-label">💵 Hela Cash Biashara</div><div class="c-value" id="cardCash">—</div><span class="c-badge badge-green" style="font-size:10px">Mauzo Cash + Malipo − Matumizi − Manunuzi</span></div>
+        <div class="card c-green"><div class="c-label">💵 Hela Cash Biashara</div><div class="c-value" id="cardCash">—</div><span class="c-badge badge-green" style="font-size:10px">Mauzo − Stock Mpya − Matumizi</span></div>
       </div>
       <div class="grid-2">
         <div class="section">
@@ -718,6 +721,15 @@ footer b{color:var(--gold);font-weight:400;}
               <div class="mini"><div class="label">Mauzo ya Mkopo</div><div class="value" id="sumMkopo">—</div></div>
               <div class="mini"><div class="label">Jumla ya Matumizi</div><div class="value" id="sumGharama">—</div></div>
               <div class="mini"><div class="label">Bidhaa Zilizobaki</div><div class="value" id="sumStock">—</div></div>
+            </div>
+            <div style="margin-top:14px;padding:12px 14px;background:var(--a-bg);border-radius:8px;border:1px solid var(--a-border)">
+              <div style="font-size:10px;font-weight:700;color:var(--a-muted);letter-spacing:.6px;margin-bottom:8px">HESABU YA HELA CASH YA BIASHARA</div>
+              <div style="font-size:13px;display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;justify-content:space-between"><span>Jumla ya Mauzo</span><span style="font-weight:700;color:var(--a-green)" id="hb-mauzo">—</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:var(--a-muted)">(-) Manunuzi ya Bidhaa Mpya</span><span style="color:var(--a-red)" id="hb-manunuzi">—</span></div>
+                <div style="display:flex;justify-content:space-between"><span style="color:var(--a-muted)">(-) Matumizi / Gharama</span><span style="color:var(--a-red)" id="hb-gharama">—</span></div>
+                <div style="border-top:1px solid var(--a-border);margin-top:3px;padding-top:6px;display:flex;justify-content:space-between;font-weight:700;font-size:14px"><span>= Hela Cash ya Biashara</span><span id="hb-hela">—</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -947,7 +959,8 @@ footer b{color:var(--gold);font-weight:400;}
         <div class="card c-gray"><div class="c-label">Manunuzi ya Siku</div><div class="c-value" id="ks-manunuzi">—</div><span class="c-badge badge-gray">Bidhaa Zilizoingia</span></div>
         <div class="card c-green"><div class="c-label">Mauzo ya Cash</div><div class="c-value" id="ks-taslimu">—</div><span class="c-badge badge-green">Cash</span></div>
         <div class="card c-amber"><div class="c-label">Mauzo ya Mkopo</div><div class="c-value" id="ks-mkopo">—</div><span class="c-badge badge-amber">Mkopo</span></div>
-        <div class="card c-blue"><div class="c-label">Hali ya Siku</div><div class="c-value" id="ks-hali">—</div><span class="c-badge" id="ks-hali-badge">—</span></div>
+        <div class="card c-red"><div class="c-label">Matumizi ya Siku</div><div class="c-value" id="ks-gharama">—</div><span class="c-badge badge-red">Gharama</span></div>
+        <div class="card c-blue"><div class="c-label">Hela Cash ya Siku</div><div class="c-value" id="ks-hali">—</div><span class="c-badge" id="ks-hali-badge">—</span></div>
       </div>
       <div class="grid-2">
         <div class="section">
@@ -969,19 +982,28 @@ footer b{color:var(--gold);font-weight:400;}
           </div>
         </div>
       </div>
-      <div class="section">
-        <div class="section-header"><h3>Manunuzi ya Tarehe Hii</h3></div>
-        <div class="section-body"><div class="table-wrap"><table>
-          <thead><tr><th>Tarehe</th><th>Bidhaa</th><th>Aina</th><th>Idadi</th><th>Bei Kununulia</th><th>Jumla</th><th>Msambazaji</th></tr></thead>
-          <tbody id="ks-tbody-m"></tbody>
-        </table></div></div>
-      </div>
-      <div class="section">
-        <div class="section-header"><h3>Mauzo ya Tarehe Hii</h3></div>
-        <div class="section-body"><div class="table-wrap"><table>
-          <thead><tr><th>Tarehe</th><th>Mteja</th><th>Bidhaa</th><th>Aina</th><th>Idadi</th><th>Jumla</th><th>Kilicholipwa</th><th>Bakaa</th></tr></thead>
-          <tbody id="ks-tbody-s"></tbody>
-        </table></div></div>
+      <div class="grid-3">
+        <div class="section">
+          <div class="section-header"><h3>Manunuzi ya Siku</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Bidhaa</th><th>Idadi</th><th>Jumla</th></tr></thead>
+            <tbody id="ks-tbody-m"></tbody>
+          </table></div></div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>Mauzo ya Siku</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Mteja</th><th>Bidhaa</th><th>Aina</th><th>Jumla</th></tr></thead>
+            <tbody id="ks-tbody-s"></tbody>
+          </table></div></div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>Matumizi ya Siku</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Aina</th><th>Kiasi</th><th>Maelezo</th></tr></thead>
+            <tbody id="ks-tbody-g"></tbody>
+          </table></div></div>
+        </div>
       </div>
     </section>
 
@@ -1005,16 +1027,40 @@ footer b{color:var(--gold);font-weight:400;}
         <div class="card c-green"><div class="c-label">Jumla ya Mauzo</div><div class="c-value" id="rep-mauzo">—</div></div>
         <div class="card c-amber"><div class="c-label">Jumla ya Matumizi</div><div class="c-value" id="rep-gharama">—</div></div>
         <div class="card c-blue"><div class="c-label">Faida ya Jumla</div><div class="c-value" id="rep-faida-j">—</div></div>
-        <div class="card c-gold"><div class="c-label">Faida Halisi</div><div class="c-value" id="rep-faida-h">—</div></div>
+        <div class="card c-gold"><div class="c-label">Faida Halisi (Margin)</div><div class="c-value" id="rep-faida-h">—</div></div>
+        <div class="card c-green"><div class="c-label">💵 Hela Cash ya Biashara</div><div class="c-value" id="rep-hela">—</div><span class="c-badge badge-green" style="font-size:10px">Mauzo − Stock − Matumizi</span></div>
         <div class="card c-red"><div class="c-label">Madeni ya Wateja</div><div class="c-value" id="rep-madeni">—</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="section">
+          <div class="section-header"><h3>Manunuzi</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Tarehe</th><th>Bidhaa</th><th>Idadi</th><th>Jumla</th></tr></thead>
+            <tbody id="rep-tbody-m"></tbody>
+          </table></div></div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>Mauzo</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Tarehe</th><th>Bidhaa</th><th>Aina</th><th>Jumla</th></tr></thead>
+            <tbody id="rep-tbody-s"></tbody>
+          </table></div></div>
+        </div>
+        <div class="section">
+          <div class="section-header"><h3>Matumizi</h3></div>
+          <div class="section-body"><div class="table-wrap"><table>
+            <thead><tr><th>Tarehe</th><th>Aina</th><th>Kiasi</th></tr></thead>
+            <tbody id="rep-tbody-g"></tbody>
+          </table></div></div>
+        </div>
       </div>
       <div class="section">
         <div class="section-header"><h3>📐 Mfumo wa Mahesabu</h3></div>
         <div class="section-body" style="font-size:13px;line-height:2.4;color:var(--a-text)">
           <p><strong>Faida ya Jumla</strong> = Jumla ya Mauzo − (Bei ya Kununulia × Idadi Iliyouzwa)</p>
           <p><strong>Faida Halisi</strong> = Faida ya Jumla − Matumizi Yote</p>
+          <p><strong>Hela Cash ya Biashara</strong> = Jumla ya Mauzo − Manunuzi − Matumizi</p>
           <p><strong>Bakaa ya Mteja</strong> = Deni Lote − Kiasi Kilicholipwa</p>
-          <p><strong>Stock Iliyobaki</strong> = Idadi Iliyonunuliwa − Idadi Iliyouzwa</p>
           <p style="color:var(--a-muted);font-size:12px;margin-top:8px">Data imehifadhiwa kwenye seva ya Supabase — inapatikana kutoka kwa vifaa vyote, ikiwemo duka la wateja.</p>
         </div>
       </div>
@@ -1471,7 +1517,8 @@ function hesabu(kuanzia,hadi){
   const faida_halisi=faida_jumla-jumla_gharama;
   const malipo_yaliyolipwa=allWateja.reduce((a,b)=>a+(b.kilicholipwa||0),0);
   const hela_cash=taslimu+malipo_yaliyolipwa-jumla_gharama-jumla_manunuzi;
-  return{jumla_mauzo,jumla_manunuzi,taslimu,mkopo,jumla_gharama,madeni,stock,faida_jumla,faida_halisi,hela_cash};
+  const hela_biashara=jumla_mauzo-jumla_manunuzi-jumla_gharama;
+  return{jumla_mauzo,jumla_manunuzi,taslimu,mkopo,jumla_gharama,madeni,stock,faida_jumla,faida_halisi,hela_cash,hela_biashara};
 }
 
 // ─── FORMS ─────────────────────────────────────────────────────
@@ -1902,11 +1949,16 @@ function renderDashibodi(){
   $('cardMauzo').textContent=pesa(t.jumla_mauzo);
   $('cardFaida').textContent=pesa(t.faida_halisi);
   $('cardMadeni').textContent=pesa(t.madeni);
-  $('cardCash').textContent=pesa(Math.max(0,t.hela_cash));
+  $('cardCash').textContent=pesa(t.hela_biashara);
   $('sumTaskimu').textContent=pesa(t.taslimu);
   $('sumMkopo').textContent=pesa(t.mkopo);
   $('sumGharama').textContent=pesa(t.jumla_gharama);
   $('sumStock').textContent=t.stock;
+  $('hb-mauzo').textContent=pesa(t.jumla_mauzo);
+  $('hb-manunuzi').textContent='− '+pesa(t.jumla_manunuzi);
+  $('hb-gharama').textContent='− '+pesa(t.jumla_gharama);
+  $('hb-hela').textContent=pesa(t.hela_biashara);
+  $('hb-hela').style.color=t.hela_biashara>0?'var(--a-green)':t.hela_biashara<0?'var(--a-red)':'var(--a-muted)';
   const ndogo=allBidhaa.filter(p=>p.idadi>0&&p.idadi<=p.kiwango_chini).map(p=>p.jina);
   const zimekwisha=allBidhaa.filter(p=>p.idadi===0).map(p=>p.jina);
   let h=[];if(zimekwisha.length)h.push('Zimekwisha: '+zimekwisha.join(', '));if(ndogo.length)h.push('Ndogo: '+ndogo.join(', '));
@@ -1915,9 +1967,9 @@ function renderDashibodi(){
   const zp=allWateja.filter(c=>c.bakaa>0&&c.tarehe_mwisho&&new Date(c.tarehe_mwisho)<leo).map(c=>c.jina);
   $('txtMadeni').textContent=zp.length?zp.join(', '):'Hakuna madeni yaliyokwisha muda ✓';
   const fb=$('faidaBadge'),th=$('txtHali'),ab=$('alertHali');
-  if(t.faida_halisi>0){fb.className='c-badge badge-green';fb.textContent='Faida ✓';th.textContent='Faida ipo — biashara inakua vizuri!';ab.className='alert-box success';}
-  else if(t.faida_halisi<0){fb.className='c-badge badge-red';fb.textContent='Hasara ⚠';th.textContent='Kuna hasara — angalia gharama.';ab.className='alert-box danger';}
-  else{fb.className='c-badge badge-gray';fb.textContent='Usawa';th.textContent='Mauzo yanafunika gharama.';ab.className='alert-box';}
+  if(t.hela_biashara>0){fb.className='c-badge badge-green';fb.textContent='Faida ✓';th.textContent=`Hela cash ya biashara: ${pesa(t.hela_biashara)} — biashara inakua vizuri!`;ab.className='alert-box success';}
+  else if(t.hela_biashara<0){fb.className='c-badge badge-red';fb.textContent='Hasara ⚠';th.textContent=`Kuna hasara ya ${pesa(Math.abs(t.hela_biashara))} — angalia gharama na manunuzi.`;ab.className='alert-box danger';}
+  else{fb.className='c-badge badge-gray';fb.textContent='Usawa';th.textContent='Mauzo yanafunika gharama na manunuzi.';ab.className='alert-box';}
 }
 
 function renderManunuzi(){
@@ -2014,38 +2066,51 @@ function renderKilaSiku(){
   if(!sel)return;
   const mp=allManunuzi.filter(p=>p.tarehe===sel);
   const ms=confirmedMauzo().filter(s=>s.tarehe===sel);
+  const ep=allGharama.filter(e=>e.tarehe===sel);
   const taslimu=ms.filter(s=>s.aina==='Taslimu').reduce((a,b)=>a+b.jumla,0);
   const mkopo=ms.filter(s=>s.aina==='Mkopo').reduce((a,b)=>a+b.jumla,0);
   const jumla_mauzo=ms.reduce((a,b)=>a+b.jumla,0);
   const jumla_manunuzi=mp.reduce((a,b)=>a+b.jumla,0);
+  const jumla_gharama_leo=ep.reduce((a,b)=>a+b.kiasi,0);
   const bakaa_mkopo=ms.filter(s=>s.aina==='Mkopo').reduce((a,b)=>a+b.bakaa,0);
-  const net=jumla_mauzo-jumla_manunuzi;
+  const net=jumla_mauzo-jumla_manunuzi-jumla_gharama_leo;
   $('ks-manunuzi').textContent=pesa(jumla_manunuzi);
   $('ks-taslimu').textContent=pesa(taslimu);
   $('ks-mkopo').textContent=pesa(mkopo);
+  $('ks-gharama').textContent=pesa(jumla_gharama_leo);
   $('ks-hali').textContent=pesa(net);
   $('ks-n-manunuzi').textContent=mp.length;
   $('ks-n-mauzo').textContent=ms.length;
   $('ks-bakaa').textContent=pesa(bakaa_mkopo);
   $('ks-jumla-mauzo').textContent=pesa(jumla_mauzo);
-  $('ks-maelezo').textContent=mp.length===0&&ms.length===0?'Hakuna shughuli tarehe hii.':`Manunuzi ${mp.length}, Mauzo ${ms.length}. Mauzo: ${pesa(jumla_mauzo)}.`;
+  $('ks-maelezo').textContent=mp.length===0&&ms.length===0&&ep.length===0?'Hakuna shughuli tarehe hii.':`Manunuzi ${mp.length}, Mauzo ${ms.length}, Matumizi ${ep.length}. Mauzo: ${pesa(jumla_mauzo)}.`;
   const badge=$('ks-hali-badge'),alert=$('ks-alert'),txt=$('ks-alert-txt');
-  if(net>0){badge.className='c-badge badge-green';badge.textContent='Nzuri ✓';txt.textContent='Siku nzuri — mauzo yamezidi manunuzi!';alert.className='alert-box success';}
-  else if(net<0){badge.className='c-badge badge-amber';badge.textContent='Bidhaa Nyingi';txt.textContent='Manunuzi yamezidi mauzo leo.';alert.className='alert-box';}
-  else{badge.className='c-badge badge-gray';badge.textContent='Usawa';txt.textContent='Mauzo na manunuzi vimesawazika.';alert.className='alert-box';}
-  $('ks-tbody-m').innerHTML=mp.length?mp.map(p=>`<tr><td>${p.tarehe}</td><td>${p.jina}</td><td>${p.aina}</td><td>${p.idadi}</td><td>${pesa(p.bei_kununulia)}</td><td>${pesa(p.jumla)}</td><td>${p.msambazaji}</td></tr>`).join(''):safuTupu(7,'Hakuna manunuzi.');
-  $('ks-tbody-s').innerHTML=ms.length?ms.map(s=>`<tr><td>${s.tarehe}</td><td>${s.mteja}</td><td>${s.jina}</td><td><span class="pill ${s.aina==='Taslimu'?'pill-green':'pill-amber'}">${s.aina}</span></td><td>${s.idadi}</td><td>${pesa(s.jumla)}</td><td>${pesa(s.kilicholipwa)}</td><td>${pesa(s.bakaa)}</td></tr>`).join(''):safuTupu(8,'Hakuna mauzo.');
+  if(net>0){badge.className='c-badge badge-green';badge.textContent='Nzuri ✓';txt.textContent=`Hela cash ya siku: ${pesa(net)} — siku nzuri ya biashara!`;alert.className='alert-box success';}
+  else if(net<0){badge.className='c-badge badge-red';badge.textContent='Hasara ⚠';txt.textContent=`Matumizi na manunuzi yamezidi mauzo kwa ${pesa(Math.abs(net))}.`;alert.className='alert-box danger';}
+  else{badge.className='c-badge badge-gray';badge.textContent='Usawa';txt.textContent='Mauzo yanafunika gharama na manunuzi.';alert.className='alert-box';}
+  $('ks-tbody-m').innerHTML=mp.length?mp.map(p=>`<tr><td><strong>${p.jina}</strong></td><td>${p.idadi}</td><td>${pesa(p.jumla)}</td></tr>`).join(''):safuTupu(3,'Hakuna manunuzi.');
+  $('ks-tbody-s').innerHTML=ms.length?ms.map(s=>`<tr><td>${s.mteja}</td><td>${s.jina}</td><td><span class="pill ${s.aina==='Taslimu'?'pill-green':'pill-amber'}">${s.aina}</span></td><td>${pesa(s.jumla)}</td></tr>`).join(''):safuTupu(4,'Hakuna mauzo.');
+  $('ks-tbody-g').innerHTML=ep.length?ep.map(e=>`<tr><td><strong>${e.aina}</strong></td><td style="color:var(--a-red)">${pesa(e.kiasi)}</td><td>${e.maelezo||'—'}</td></tr>`).join(''):safuTupu(3,'Hakuna matumizi.');
 }
 
 function renderRipoti(){
   const k=$('r-kuanzia').value,h=$('r-hadi').value;
+  const ch=d=>(!k||d>=k)&&(!h||d<=h);
   const t=hesabu(k,h);
   $('rep-manunuzi').textContent=pesa(t.jumla_manunuzi);
   $('rep-mauzo').textContent=pesa(t.jumla_mauzo);
   $('rep-gharama').textContent=pesa(t.jumla_gharama);
   $('rep-faida-j').textContent=pesa(t.faida_jumla);
   $('rep-faida-h').textContent=pesa(t.faida_halisi);
+  $('rep-hela').textContent=pesa(t.hela_biashara);
+  $('rep-hela').style.color=t.hela_biashara>0?'var(--a-green)':t.hela_biashara<0?'var(--a-red)':'inherit';
   $('rep-madeni').textContent=pesa(t.madeni);
+  const pm=allManunuzi.filter(p=>ch(p.tarehe));
+  const ps=confirmedMauzo().filter(s=>ch(s.tarehe));
+  const pg=allGharama.filter(e=>ch(e.tarehe));
+  $('rep-tbody-m').innerHTML=pm.length?pm.map(p=>`<tr><td>${p.tarehe}</td><td><strong>${p.jina}</strong></td><td>${p.idadi}</td><td>${pesa(p.jumla)}</td></tr>`).join(''):safuTupu(4,'Hakuna manunuzi.');
+  $('rep-tbody-s').innerHTML=ps.length?ps.map(s=>`<tr><td>${s.tarehe}</td><td>${s.jina}</td><td><span class="pill ${s.aina==='Taslimu'?'pill-green':'pill-amber'}">${s.aina}</span></td><td>${pesa(s.jumla)}</td></tr>`).join(''):safuTupu(4,'Hakuna mauzo.');
+  $('rep-tbody-g').innerHTML=pg.length?pg.map(e=>`<tr><td>${e.tarehe}</td><td><strong>${e.aina}</strong></td><td style="color:var(--a-red)">${pesa(e.kiasi)}</td></tr>`).join(''):safuTupu(3,'Hakuna matumizi.');
 }
 function futhaChujo(){$('r-kuanzia').value='';$('r-hadi').value='';renderRipoti();}
 
