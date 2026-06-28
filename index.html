@@ -1620,6 +1620,14 @@ async function futaGharama(id){
   funguaModalFuta(async()=>{await DB.del('gharama',`id=eq.${id}`);toast('Rekodi imefutwa');await loadAll();});
 }
 
+async function futaBidhaa(id){
+  funguaModalFuta(async()=>{
+    await DB.del('bidhaa',`id=eq.${id}`);
+    toast('Bidhaa imefutwa kabisa');
+    await loadAll();
+  });
+}
+
 // ═══ MALIPO YA WATEJA ═══
 function funguaMalipo(id){
   const c=allWateja.find(x=>x.id===id);if(!c)return;
@@ -1955,7 +1963,7 @@ function renderStock(){
     <td><span class="pill ${fp>=30?'pill-green':fp>=15?'pill-amber':'pill-red'}">${fp}%</span></td>
     <td><strong>${p.idadi}</strong></td><td>${badge}</td>
     <td><div class="toggle-wrap"><div class="toggle${p.onyesha_dukani?' on':''}" onclick="toggleDukani('${p.id}')"></div></div></td>
-    <td><button class="btn sm gold" onclick="funguaEditStock('${p.id}')">✏ Hariri</button></td></tr>`;
+    <td style="display:flex;gap:4px;flex-wrap:wrap;"><button class="btn sm gold" onclick="funguaEditStock('${p.id}')">✏ Hariri</button><button class="btn sm danger" onclick="futaBidhaa('${p.id}')">🗑 Futa</button></td></tr>`;
   }).join(''):safuTupu(10,'Hakuna bidhaa. Zinaongezwa ukifanya ununuzi.');
 }
 
